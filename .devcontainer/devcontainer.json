@@ -1,0 +1,32 @@
+{
+	"name": "Go Auction Project",
+	"dockerComposeFile": "../docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspace",
+	
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+	],
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"golang.go",
+				"ms-azuretools.vscode-docker",
+				"mongodb.mongodb-vscode"
+			],
+			"settings": {
+				"go.toolsManagement.checkForUpdates": "local",
+				"go.useLanguageServer": true,
+				"go.gopath": "/go",
+				"go.goroot": "/usr/local/go"
+			}
+		}
+	},
+
+	"forwardPorts": [8080, 27017],
+
+	"postCreateCommand": "go mod download",
+
+	"remoteUser": "root"
+}
