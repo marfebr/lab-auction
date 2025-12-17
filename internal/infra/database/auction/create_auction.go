@@ -46,5 +46,34 @@ func (ar *AuctionRepository) CreateAuction(
 		return internal_error.NewInternalServerError("Error trying to insert auction")
 	}
 
+	go func() {
+		select {
+			case <- time.After(getAuctionInterval()):
+				update := bson.M{
+					"$set": bson.M{
+						"status": auction_entity.Completed,
+					},
+				}
+				filter := bson.M{"_id": auctionEntity.Id}
+				_, err := ar.Collection.UpdateOne(ctx.Background(), filter, update)
+				if err != nil {
+					logger.Error("Error trying to update auction status", err)
+					return
+				}
+		}
+	}()
+
+
 	return nil
+}
+
+
+func getAuctionInterval() time.Duration {
+	auctionIntervalEnv := os.Getenv("AUCTION_INTERVAL")
+	
+	 duration, err := time.ParseDuration(auctionIntervalEnv)
+	if err != nil {
+		return 5 * time.Minute
+	}
+	return duration
 }
