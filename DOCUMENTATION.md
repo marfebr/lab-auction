@@ -269,7 +269,7 @@ MONGODB_DB=auctions
 ```go
 // Goroutine de fechamento automático
 go func() {
-    time.Sleep(getAuctionInterval())
+    <-time.After(getAuctionInterval())
     
     // Filtro: apenas leilões ativos
     filter := bson.M{
@@ -348,6 +348,3 @@ docker-compose logs -f mongodb
 
 Este projeto foi desenvolvido como parte de um desafio técnico.
 
----
-
-**Desenvolvido com ❤️ usando Go e Docker**
