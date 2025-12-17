@@ -3,7 +3,17 @@
 	"dockerComposeFile": "../docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
+	"overrideCommand": true,
+	"shutdownAction": "stopCompose",
 	
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"moby": false,
+			"dockerDashComposeVersion": "v2"
+		}
+	},
+
 	"mounts": [
 		"source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
 	],

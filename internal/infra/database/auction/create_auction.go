@@ -5,7 +5,10 @@ import (
 	"fullcycle-auction_go/configuration/logger"
 	"fullcycle-auction_go/internal/entity/auction_entity"
 	"fullcycle-auction_go/internal/internal_error"
+	"os"
+	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -47,22 +50,24 @@ func (ar *AuctionRepository) CreateAuction(
 	}
 
 	go func() {
-		select {
-			case <- time.After(getAuctionInterval()):
-				update := bson.M{
-					"$set": bson.M{
-						"status": auction_entity.Completed,
-					},
-				}
-				filter := bson.M{"_id": auctionEntity.Id}
-				_, err := ar.Collection.UpdateOne(ctx.Background(), filter, update)
-				if err != nil {
-					logger.Error("Error trying to update auction status", err)
-					return
-				}
+		<-time.After(getAuctionInterval())
+		
+		filter := bson.M{
+			"_id":    auctionEntity.Id,
+			"status": auction_entity.Active,
+		}
+		update := bson.M{
+			"$set": bson.M{
+				"status": auction_entity.Completed,
+			},
+		}
+		
+		_, err := ar.Collection.UpdateOne(context.Background(), filter, update)
+		if err != nil {
+			logger.Error("Error trying to update auction status", err)
+			return
 		}
 	}()
-
 
 	return nil
 }
@@ -70,8 +75,7 @@ func (ar *AuctionRepository) CreateAuction(
 
 func getAuctionInterval() time.Duration {
 	auctionIntervalEnv := os.Getenv("AUCTION_INTERVAL")
-	
-	 duration, err := time.ParseDuration(auctionIntervalEnv)
+	duration, err := time.ParseDuration(auctionIntervalEnv)
 	if err != nil {
 		return 5 * time.Minute
 	}
