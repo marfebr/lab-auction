@@ -35,5 +35,3 @@ vendor/
 .env
 .env.local
 
-#
-.github/

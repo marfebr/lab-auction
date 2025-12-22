@@ -10,9 +10,9 @@ Para essa tarefa, você utilizará o go routines e deverá se concentrar no proc
 
 ## Você deverá desenvolver:
 
-Uma função que irá calcular o tempo do leilão, baseado em parâmetros previamente definidos em variáveis de ambiente;
-Uma nova go routine que validará a existência de um leilão (auction) vencido (que o tempo já se esgotou) e que deverá realizar o update, fechando o leilão (auction);
-Um teste para validar se o fechamento está acontecendo de forma automatizada;
+1. Uma função que irá calcular o tempo do leilão, baseado em parâmetros previamente definidos em variáveis de ambiente;
+2. Uma nova go routine que validará a existência de um leilão (auction) vencido (que o tempo já se esgotou) e que deverá realizar o update, fechando o leilão (auction);
+3. Um teste para validar se o fechamento está acontecendo de forma automatizada;
 
 ## Dicas:
 
